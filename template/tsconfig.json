@@ -1,0 +1,31 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "underscore": ["lodash"],
+      "@assets": ["./src/assets"],
+      "@api": ["src/api"],
+      "@common": ["./src/common"],
+      "@components": ["./src/components"],
+      "@navigation": ["./src/navigation"],
+      "@appredux": ["./src/appredux"],
+      "@screens": ["./src/screens"],
+      "@theme": ["./src/theme"],
+      "@images": ["./src/assets/images"],
+      "@apptypes": ["./src/types"],
+      "@appi18n": ["./src/i18n"],
+      "@apphooks": ["./src/hooks"],
+      "@static": ["./src/data"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
+}

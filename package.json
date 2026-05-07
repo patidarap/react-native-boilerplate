@@ -1,0 +1,24 @@
+{
+  "name": "@arjungenius/react-native-boilerplate",
+  "version": "1.0.4",
+  "description": "React Native 0.84.1 Boilerplate Template",
+  "main": "template.config.js",
+  "files": [
+    "template",
+    "template.config.js",
+    "README.md"
+  ],
+  "keywords": [
+    "react-native",
+    "template",
+    "boilerplate",
+    "redux",
+    "navigation"
+  ],
+  "author": "Arjun",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arjungenius/react-native-boilerplate.git"
+  }
+}
