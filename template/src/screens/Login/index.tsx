@@ -1,19 +1,33 @@
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {FC} from 'react';
-import {StackScreenProps} from '@react-navigation/stack';
-import {StackScreenRouteProp} from '@apptypes';
-import {colors} from '@theme';
-import {PrimaryText} from '@components';
-import {strings} from '@appi18n';
+import {AuthStackScreenProps} from '@types';
+import {colors, perfectSize} from '@theme';
+import {PrimaryButton, PrimaryText} from '@components';
+import {fonts} from '@fonts';
+import {showDangerMessage} from '@common';
+import {useTranslation} from 'react-i18next';
+import {dispatch, initialState, setUserData} from '@appRedux';
 
-const LogIn: FC<StackScreenProps<StackScreenRouteProp, 'LogIn'>> = ({
-  navigation,
-  route,
-}) => {
+const LogIn: FC<AuthStackScreenProps<'LogIn'>> = ({navigation}) => {
+  const {t: translate} = useTranslation();
   return (
-    <SafeAreaView style={styles.mainView}>
-      <PrimaryText>{strings.logInScreen.lblLogInScreen}</PrimaryText>
-    </SafeAreaView>
+    <View style={styles.mainView}>
+      <PrimaryText style={styles.lblLoginScreen}>
+        {translate('loginScreen.loginScreen')}
+      </PrimaryText>
+      <PrimaryButton
+        label={translate('loginScreen.login')}
+        onPress={() => {
+          dispatch(setUserData(initialState.userData));
+        }}
+      />
+      <PrimaryButton
+        label={translate('loginScreen.showErrorMessage')}
+        onPress={() => {
+          showDangerMessage(translate('validations.testError'));
+        }}
+      />
+    </View>
   );
 };
 
@@ -25,5 +39,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
+    rowGap: perfectSize(20),
+  },
+  lblLoginScreen: {
+    fontFamily: fonts.bold,
+    fontSize: perfectSize(20),
   },
 });

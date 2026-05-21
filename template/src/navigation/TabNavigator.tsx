@@ -1,37 +1,36 @@
-import {StackScreenRouteProp, TabScreenRouteProp} from '@apptypes';
-
-import {H, W, colors, commonStyles} from '@theme';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StackScreenProps} from '@react-navigation/stack';
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Home} from '@screens';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {AppStackScreenProps, TabScreenRouteProp} from '@types';
+import {colors, perfectSize} from '@theme';
+import {Home, Profile} from '@screens';
+import {
+  IC_Home_Active,
+  IC_Home_UnActive,
+  IC_Setting_Active,
+  IC_Setting_UnActive,
+} from '@images';
+
 const Tabs = createBottomTabNavigator<TabScreenRouteProp>();
 
-const TabNavigation: FC<
-  StackScreenProps<StackScreenRouteProp, 'TabNavigation'>
-> = ({navigation, route}) => {
-  const [showLogout, setShowLogout] = useState<boolean>(false);
-
+export const TabNavigation: FC<AppStackScreenProps<'TabNavigation'>> = () => {
   const renderTabItem = (
     focused: boolean,
-    TabFocusedImage: any,
-    TabUnFocusedImage: any,
+    TabFocusedIcon: any,
+    TabUnFocusedIcon: any,
   ) => {
     return focused ? (
-      <View style={styles.iconSelected}>
-        <TabFocusedImage />
-      </View>
+      <TabFocusedIcon height={perfectSize(24)} width={perfectSize(24)} />
     ) : (
-      <TabUnFocusedImage />
+      <TabUnFocusedIcon height={perfectSize(24)} width={perfectSize(24)} />
     );
   };
 
   return (
-    <View style={commonStyles.mainView}>
+    <View style={styles.container}>
       <Tabs.Navigator
+        id="TabNavigator"
         screenOptions={{
-          tabBarItemStyle: {paddingVertical: H(13)},
           headerShadowVisible: false,
           headerShown: false,
         }}>
@@ -40,8 +39,17 @@ const TabNavigation: FC<
           component={Home}
           options={{
             tabBarLabel: () => false,
-            // tabBarIcon: ({focused}) =>
-            //   renderTabItem(focused, IC_Project_Focused, IC_Project_UnFocused),
+            tabBarIcon: ({focused}) =>
+              renderTabItem(focused, IC_Home_Active, IC_Home_UnActive),
+          }}
+        />
+        <Tabs.Screen
+          name={'Profile'}
+          component={Profile}
+          options={{
+            tabBarLabel: () => false,
+            tabBarIcon: ({focused}) =>
+              renderTabItem(focused, IC_Setting_Active, IC_Setting_UnActive),
           }}
         />
       </Tabs.Navigator>
@@ -49,13 +57,9 @@ const TabNavigation: FC<
   );
 };
 
-export default TabNavigation;
-
 const styles = StyleSheet.create({
-  iconSelected: {
-    borderWidth: W(1.5),
-    borderColor: colors.black,
-    borderRadius: W(30),
-    padding: 1.5,
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
   },
 });

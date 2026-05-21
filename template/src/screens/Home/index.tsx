@@ -1,16 +1,36 @@
-import {SafeAreaView, StyleSheet} from 'react-native';
 import React, {FC} from 'react';
-import {StackScreenProps} from '@react-navigation/stack';
-import {TabScreenRouteProp} from '@apptypes';
-import {colors} from '@theme';
-import {PrimaryText} from '@components';
-import {strings} from '@appi18n';
+import {StyleSheet, View} from 'react-native';
+import {TabNavigationWithAppStackScreenProps} from '@types';
+import {colors, perfectSize} from '@theme';
+import {fonts} from '@fonts';
+import {PrimaryButton, PrimaryText} from '@components';
+import {showSuccessMessage} from '@common';
+import {useTranslation} from 'react-i18next';
+import moment from 'moment';
 
-const Home: FC<StackScreenProps<TabScreenRouteProp, 'Home'>> = () => {
+const Home: FC<TabNavigationWithAppStackScreenProps<'Home'>> = ({
+  navigation,
+}) => {
+  const {t: translate} = useTranslation();
   return (
-    <SafeAreaView style={styles.mainView}>
-      <PrimaryText>{strings.homeScreen.lblHomeScreen}</PrimaryText>
-    </SafeAreaView>
+    <View style={styles.mainView}>
+      <PrimaryText style={styles.lblLoginScreen}>
+        {translate('homeScreen.homeScreen')}
+      </PrimaryText>
+      <PrimaryText style={styles.lblLoginScreen}>
+        {moment().format('LLLL')}
+      </PrimaryText>
+      <PrimaryButton
+        label={translate('homeScreen.openModalScreen')}
+        onPress={() => navigation.navigate('ModalScreen')}
+      />
+      <PrimaryButton
+        label={translate('homeScreen.showSuccessMessage')}
+        onPress={() => {
+          showSuccessMessage(translate('validations.testSuccess'));
+        }}
+      />
+    </View>
   );
 };
 
@@ -22,5 +42,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
+    rowGap: perfectSize(20),
+  },
+  lblLoginScreen: {
+    fontFamily: fonts.bold,
+    fontSize: perfectSize(20),
   },
 });

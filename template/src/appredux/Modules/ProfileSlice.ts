@@ -1,12 +1,15 @@
-import {UserTypes} from '@apptypes';
+import {UserTypes} from '@types';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {ASYNC_KEY, removeAsyncData, setAsyncData} from '@common';
+import {onChangeLanguage} from '@i18n';
 
 interface ProfileState {
   userData: UserTypes;
+  language: 'en' | 'es';
   isLogIn: boolean;
 }
 
-const initialState: ProfileState = {
+export const initialState: ProfileState = {
   userData: {
     _id: '',
     user_name: '',
@@ -23,6 +26,7 @@ const initialState: ProfileState = {
     device_os_version: '',
     device_type: '',
   },
+  language: 'en',
   isLogIn: false,
 };
 
@@ -33,14 +37,20 @@ export const profileSlice = createSlice({
     setUserData: (state, action: PayloadAction<UserTypes>) => {
       state.userData = action.payload;
       state.isLogIn = true;
+      setAsyncData(ASYNC_KEY.USER, action.payload);
     },
-    userReset: state => {
+    resetUserData: state => {
       state.isLogIn = false;
       state.userData = initialState.userData;
+      removeAsyncData(ASYNC_KEY.USER);
+    },
+    setLanguage: (state, action: PayloadAction<'en' | 'es'>) => {
+      state.language = action.payload;
+      onChangeLanguage(action.payload);
     },
   },
 });
 
-export const {setUserData, userReset} = profileSlice.actions;
+export const {setUserData, resetUserData, setLanguage} = profileSlice.actions;
 
 export default profileSlice.reducer;

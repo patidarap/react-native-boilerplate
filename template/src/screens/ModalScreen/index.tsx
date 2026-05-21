@@ -1,28 +1,56 @@
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {Pressable, StyleSheet, Text} from 'react-native';
 import React, {FC} from 'react';
-import {StackScreenProps} from '@react-navigation/stack';
-import {StackScreenRouteProp} from '@apptypes';
-import {colors} from '@theme';
+import {AppStackScreenProps} from '@types';
+import {colors, perfectSize} from '@theme';
+import {fonts} from '@fonts';
 import {PrimaryText} from '@components';
-import {strings} from '@appi18n';
+import {useTranslation} from 'react-i18next';
 
-const ModalScreen: FC<
-  StackScreenProps<StackScreenRouteProp, 'ModalScreen'>
-> = () => {
+const ModalScreen: FC<AppStackScreenProps<'ModalScreen'>> = ({navigation}) => {
+  const {t: translate} = useTranslation();
+
   return (
-    <SafeAreaView style={styles.mainView}>
-      <PrimaryText>{strings.modalScreen.lblModalScreen}</PrimaryText>
-    </SafeAreaView>
+    <Pressable style={styles.backdrop} onPress={() => navigation.goBack()}>
+      <Pressable style={styles.card} onPress={() => {}}>
+        <PrimaryText style={styles.title}>
+          {translate('modalScreen.modalScreen')}
+        </PrimaryText>
+        <PrimaryText style={styles.description}>
+          {translate('modalScreen.modalDescription')}
+        </PrimaryText>
+      </Pressable>
+    </Pressable>
   );
 };
 
 export default ModalScreen;
 
 const styles = StyleSheet.create({
-  mainView: {
+  backdrop: {
     flex: 1,
     backgroundColor: colors.black60,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  card: {
+    width: '85%',
+    backgroundColor: colors.white,
+    borderRadius: perfectSize(20),
+    paddingVertical: perfectSize(32),
+    paddingHorizontal: perfectSize(24),
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: perfectSize(18),
+    fontFamily: fonts.semiBold,
+    color: colors.black,
+    marginBottom: perfectSize(8),
+  },
+  description: {
+    fontSize: perfectSize(13),
+    fontFamily: fonts.primary,
+    color: colors.black,
+    textAlign: 'center',
+    opacity: 0.5,
   },
 });

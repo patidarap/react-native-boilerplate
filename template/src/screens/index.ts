@@ -1,4 +1,5 @@
-import Home from './Home';
 import LogIn from './Login';
+import Home from './Home';
+import Profile from './Profile';
 import ModalScreen from './ModalScreen';
-export {LogIn, ModalScreen, Home};
+export {LogIn, Home, Profile, ModalScreen};

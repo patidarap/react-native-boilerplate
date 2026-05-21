@@ -1,74 +1,89 @@
-# React Native Template Boilerplate
+# React Native Boilerplate
 
-This is the boilerplate project that includes navigation and other essential setups. Use this template to kickstart your React Native project without worrying about initial configurations. Please refer to the README file for setup instructions and a detailed explanation of the boilerplate structure.
+A production-ready React Native boilerplate with navigation, Redux, i18n, axios, and more — pre-configured so you can focus on building features.
 
 ## Usage
 
 ```bash
-npx @react-native-community/cli@latest init MyApp --template @arjungenius/react-native-boilerplate
+npx @react-native-community/cli@latest init MyApp --template react-native-boiler-plate
 ```
 
 ## Features
 
-- **Folder Structure:** Organized folder layout for API, Redux, assets, components, screens, and more.
-- **Redux Integration:** Includes Redux setup with slices for managing loader and profile states.
-- **Asset Management:** Handles fonts and images with an export setup for easy access.
-- **Internationalization (i18n):** Localization support with English language translations.
-- **Navigation:** Configured with React Navigation for stack and bottom tab navigation.
-- **Utility Functions:** Common utilities like async services and constants provided.
-- **Custom Components:** Reusable UI components like loaders and styled text components.
-- **TypeScript Support:** Includes TypeScript type definitions for enhanced development.
+- **Navigation:** React Navigation with separate `AuthStack`, `AppStack`, `TabNavigator`, and a typed `RootNavigationRef` for navigating outside components
+- **Redux:** Redux Toolkit setup with `LoaderSlice` and `ProfileSlice`, typed `useAppSelector` / `useAppDispatch` hooks
+- **Axios:** Pre-configured `axiosInstance` with request/response interceptors for auth token injection and error handling (401, 500, network errors)
+- **Internationalization (i18n):** i18next + react-i18next with English and Spanish locale support
+- **TypeScript:** Full type coverage including navigation param lists and screen props
+- **Babel Aliases:** Clean imports via path aliases (e.g. `@screens`, `@components`, `@appRedux`)
+- **Custom Components:** `PrimaryLoader`, `PrimaryText`, `PrimaryButton`, `PrimaryFlashMessage`, `PrimaryScrollView`, `NoInternetModalPopUp`
+- **Asset Management:** Fonts (Poppins) and SVG images with centralized exports
+- **Async Storage:** Utility wrappers for AsyncStorage via `@common`
+- **Network Detection:** `NoInternetModalPopUp` using `@react-native-community/netinfo`
 
-## Project Folder Structure
+## Requirements
+
+- Node >= 22.11.0
+- React Native 0.84.1
+- React 19.2.3
+
+## Project Structure
 
 ```
 📁src
 │
 ├── 📁api
-│   ├── APIManager.ts
+│   ├── axiosInstance.ts       # Axios instance with request/response interceptors
 │   └── index.ts
 │
-├── 📁appredux
-│   ├── 📁Modules
-│   │   ├── LoaderSlice.ts
-│   │   ├── ProfileSlice.ts
+├── 📁appRedux
+│   ├── 📁modules
+│   │   ├── LoaderSlice.ts     # Global loader state
+│   │   └── ProfileSlice.ts    # User auth/profile state
+│   └── index.ts               # Store setup, typed hooks, slice exports
+│
+├── 📁assets
+│   ├── 📁fonts
+│   │   ├── Poppins-*.ttf
+│   │   └── index.ts
+│   ├── 📁images
+│   │   ├── IC_Home_Active.svg
+│   │   ├── IC_Home_UnActive.svg
+│   │   ├── IC_Setting_Active.svg
+│   │   ├── IC_Setting_UnActive.svg
 │   │   └── index.ts
 │   └── index.ts
 │
-├── 📁assets
-│   ├── 📁Fonts
-│   │   ├── Inter-Black.ttf
-│   │   ├── Inter-Bold.ttf
-│   └── 📁Images
-│       ├── IC_Close.svg
-│       ├── IC_CloseWhite.svg
-│       └── index.ts
-│
 ├── 📁common
-│   ├── asyncServices.ts
-│   ├── constant.ts
+│   ├── asyncServices.ts       # AsyncStorage get/set/clear helpers
+│   ├── constant.ts            # App-wide constants (BASE_URL, ASYNC_KEY, etc.)
+│   ├── helperFunctions.ts     # Utility functions (showDangerMessage, prettyPrint, etc.)
 │   └── index.ts
 │
 ├── 📁components
-│   ├── CustomLoader.tsx
+│   ├── NoInternetModalPopUp.tsx
+│   ├── PrimaryButton.tsx
+│   ├── PrimaryFlashMessage.tsx  # Animated toast with fade in/out, per-type styling
+│   ├── PrimaryLoader.tsx
+│   ├── PrimaryScrollView.tsx    # Keyboard-aware ScrollView, auto-scrolls to focused input
 │   ├── PrimaryText.tsx
-│   └── index.ts
-│
-├── 📁data
 │   └── index.ts
 │
 ├── 📁hooks
 │   └── index.ts
 │
 ├── 📁i18n
-│   ├── en.ts
+│   ├── en.json                # English translations
+│   ├── es.json                # Spanish translations
+│   ├── i18n.ts                # i18next configuration
 │   └── index.ts
 │
-├── index.tsx
-│
 ├── 📁navigation
-│   ├── MainNavigation.tsx
-│   ├── RootNavigation.tsx
+│   ├── AuthStack.tsx          # Unauthenticated screens (LogIn)
+│   ├── AppStack.tsx           # Authenticated screens (TabNavigation, ModalScreen)
+│   ├── MainNavigation.tsx     # Root NavigationContainer, switches Auth/App stack
+│   ├── RootNavigationRef.ts   # Typed navigationRef + navigate/goBack/resetRoot helpers
+│   ├── TabNavigator.tsx       # Bottom tab navigator (Home, Profile)
 │   └── index.ts
 │
 ├── 📁screens
@@ -76,164 +91,178 @@ npx @react-native-community/cli@latest init MyApp --template @arjungenius/react-
 │   │   └── index.tsx
 │   ├── 📁Login
 │   │   └── index.tsx
+│   ├── 📁ModalScreen
+│   │   └── index.tsx
+│   ├── 📁Profile
+│   │   └── index.tsx
 │   └── index.ts
 │
 ├── 📁services
 │   └── index.ts
 │
-├── 📁theme
+├── 📁static
 │   └── index.ts
 │
-└── 📁types
-    └── index.ts
+├── 📁theme
+│   ├── colors.ts
+│   ├── dimensions.ts          # perfectSize helper
+│   ├── styles.ts
+│   └── index.ts
+│
+├── 📁types
+│   ├── declarations.d.ts      # SVG and module declarations
+│   └── index.ts               # Navigation param lists and screen prop types
+│
+└── index.tsx                  # App entry point
 ```
 
-## Folder Overview
+## Custom Components
 
-This section provides a structured overview of the project's folder organization within the `src` directory. Each folder serves a specific purpose and contains relevant files necessary for developing and maintaining the React Native application. Importing and exporting within the project is centralized through the `index.ts` files located in each parent folder.
+### PrimaryFlashMessage
 
-### api
-Contains API-related files.
-- `APIManager.ts`: Manages API calls.
-- `index.ts`: Entry point for API-related exports.
+Animated toast notification with per-type styling (success, danger, warning, info). Fade in/out animation is driven by `animationDuration`. Rendered via a custom `FlashMessageComponent` for full layout control.
 
-### appredux
-Contains Redux-related files.
-- `LoaderSlice.ts`: Redux slice for loader management.
-- `ProfileSlice.ts`: Redux slice for profile management.
-- `index.ts`: Entry point for Redux setup.
+```ts
+import {showSuccessMessage, showDangerMessage} from '@common';
 
-### assets
-Contains fonts and images used in the application.
-- **Fonts:** Inter-Black.ttf, Inter-Bold.ttf, and more.
-- **Images:** IC_Close.svg, IC_CloseWhite.svg
-- `index.ts`: Exports image resources.
+// Success
+showSuccessMessage('Saved!');
 
-### common
-Contains common utility functions and constants.
-- `asyncServices.ts`: Handles asynchronous services.
-- `constant.ts`: Contains application constants.
-- `index.ts`: Entry point for common utility exports.
+// Error
+showDangerMessage('Something went wrong');
 
-### components
-Contains reusable UI components.
-- `CustomLoader.tsx`: Custom loader component.
-- `PrimaryText.tsx`: Component for primary text styling.
-- `index.ts`: Entry point for component exports.
+// With description
+showDangerMessage('Check your input', {description: 'Email is invalid'});
 
-### data
-Contains data-related configurations.
-- `index.ts`: Entry point for data configurations.
+// With a local FlashMessage ref
+showSuccessMessage('Profile updated!', {}, flashRef);
+showDangerMessage('Upload failed', {description: 'Try again'}, flashRef);
+```
 
-### hooks
-Contains custom React hooks.
-- `index.ts`: Entry point for custom hook exports.
+### PrimaryScrollView
 
-### i18n
-Contains internationalization files.
-- `en.ts`: English language translations.
-- `index.ts`: Entry point for internationalization exports.
+A keyboard-aware `ScrollView` that automatically scrolls the focused `TextInput` into view when the keyboard opens. The scroll offset is calculated dynamically based on the actual height of the focused input.
 
-### navigation
-Contains navigation-related components.
-- `MainNavigation.tsx`: Main navigation configuration.
-- `RootNavigation.tsx`: Root navigation setup.
-- `index.ts`: Entry point for navigation exports.
+```tsx
+import {PrimaryScrollView} from '@components';
 
-### screens
-Contains screen components for the application.
-- **Home:** `index.tsx` — Home screen component.
-- **Login:** `index.tsx` — Login screen component.
-- `index.ts`: Entry point for exporting screen components.
+<PrimaryScrollView>
+  <TextInput placeholder="Email" />
+  <TextInput placeholder="Password" />
+</PrimaryScrollView>;
+```
 
-### services
-Contains service layer configurations.
-- `index.ts`: Entry point for service configurations.
+To adjust the gap above the focused input, change the padding value inside `PrimaryScrollView.tsx`:
 
-### theme
-Contains theme-related configurations.
-- `index.ts`: Entry point for theme configurations.
+```ts
+// Adjust the padding value (height - perfectSize(12)) to control the gap above the focused input.
+y: Math.max(0, y - height - perfectSize(12));
+```
 
-### types
-Contains TypeScript type definitions.
-- `index.ts`: Entry point for type definitions.
+## Navigation Structure
+
+```
+MainNavigation (NavigationContainer)
+│
+├── AuthStack        → LogIn
+│
+└── AppStack
+    ├── TabNavigator
+    │   ├── Home
+    │   └── Profile
+    └── ModalScreen  (transparentModal)
+```
+
+### Screen Prop Types
+
+| Type                          | Use for                                              |
+| ----------------------------- | ---------------------------------------------------- |
+| `AuthStackScreenProps<T>`     | Screens inside `AuthStack` (e.g. `LogIn`)            |
+| `AppStackScreenProps<T>`      | Screens inside `AppStack` (e.g. `ModalScreen`)       |
+| `TabNavigationScreenProps<T>` | Tab screens that only use tab navigation             |
+| `CompositeTabScreenProps<T>`  | Tab screens that also navigate to `AppStack` screens |
+
+### Navigating Outside Components
+
+Use the helpers from `@navigation` anywhere (services, redux, axios interceptors):
+
+```ts
+import {navigate, goBack, resetRoot} from '@navigation';
+
+navigate('LogIn');
+navigate('ModalScreen');
+resetRoot({index: 0, routes: [{name: 'LogIn'}]});
+```
 
 ## Babel Aliases
 
-The project uses Babel aliases to simplify imports. By default, the following aliases are configured:
+| Alias         | Path                  |
+| ------------- | --------------------- |
+| `@api`        | `./src/api`           |
+| `@appRedux`   | `./src/appRedux`      |
+| `@assets`     | `./src/assets`        |
+| `@common`     | `./src/common`        |
+| `@components` | `./src/components`    |
+| `@fonts`      | `./src/assets/fonts`  |
+| `@hooks`      | `./src/hooks`         |
+| `@i18n`       | `./src/i18n`          |
+| `@images`     | `./src/assets/images` |
+| `@navigation` | `./src/navigation`    |
+| `@screens`    | `./src/screens`       |
+| `@services`   | `./src/services`      |
+| `@static`     | `./src/static`        |
+| `@theme`      | `./src/theme`         |
+| `@types`      | `./src/types`         |
 
-| Alias | Path |
-|---|---|
-| `@api` | `./src/api` |
-| `@appredux` | `./src/appredux` |
-| `@assets` | `./src/assets` |
-| `@common` | `./src/common` |
-| `@components` | `./src/components` |
-| `@data` | `./src/data` |
-| `@hooks` | `./src/hooks` |
-| `@i18n` | `./src/i18n` |
-| `@navigation` | `./src/navigation` |
-| `@screens` | `./src/screens` |
-| `@services` | `./src/services` |
-| `@theme` | `./src/theme` |
-| `@apptypes` | `./src/types` |
+## Adding a New Alias
 
-## Customizing or Adding Aliases
+1. Create a folder inside `src/` with an `index.ts` that exports everything from it.
 
-To create custom aliases or add additional folders:
-
-1. **Create a New Folder:** Inside the `src` directory, create a new folder for your module or functionality.
-
-2. **Index File:** Inside your new folder, create an `index.ts` file. Import all files and modules from this folder and export them.
-
-3. **Modify Babel Configuration:** Update `babel.config.js`:
+2. Add the alias to `babel.config.js`:
 
 ```js
-module.exports = {
-  plugins: [
-    [
-      'module-resolver',
-      {
-        alias: {
-          '@newAlias': './src/newFolder',
-        },
-      },
-    ],
-  ],
-};
-```
-
-4. **Update TypeScript Configuration:** Modify `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@newAlias/*": ["src/newFolder/*"]
-    }
-  }
+alias: {
+  '@newAlias': './src/newFolder',
 }
 ```
 
-## How to Start the Project
+3. Add the path to `tsconfig.json`:
 
-Install node_modules:
+```json
+"paths": {
+  "@newAlias": ["./src/newFolder"]
+}
+```
+
+## Getting Started
+
+Install dependencies:
+
 ```bash
 npm install
 ```
 
+iOS — install pods (first time or after native dependency changes):
+
+```bash
+bundle install
+bundle exec pod install
+```
+
 Run on Android:
+
 ```bash
 npm run android
 ```
 
 Run on iOS:
+
 ```bash
 npm run ios
 ```
 
-Start Metro bundler:
+Start Metro:
+
 ```bash
 npm start
 ```

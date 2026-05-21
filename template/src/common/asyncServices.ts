@@ -1,7 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import EncryptedStorage from 'react-native-encrypted-storage';
-
-//this file is created for the all the async services
 
 export const setAsyncData = async (key: string, value: any) => {
   try {
@@ -22,35 +19,23 @@ export const getAsyncData = async (key: string) => {
 export const removeAsyncData = async (key: string) => {
   try {
     await AsyncStorage.removeItem(key);
-  } catch (e) {
-    // remove error
-  }
+  } catch (e) {}
 };
 
-// export const setEncryptedStorage = async (key: string, value: any) => {
-//   try {
-//     const jsonValue = JSON.stringify(value);
-//     await EncryptedStorage.setItem(key, jsonValue);
-//   } catch (e) {
-//     throw e;
-//   }
-// };
+export const removeMultipleAsyncData = async (keys: string[]) => {
+  try {
+    await AsyncStorage.removeMany(keys);
+  } catch (e) {}
+};
 
-// export const getEncryptedStorage = async (key: string) => {
-//   let data = null;
-//   try {
-//     const res: any = await EncryptedStorage.getItem(key);
-//     data = JSON.parse(res);
-//   } catch (e) {
-//     throw e;
-//   }
-//   return data;
-// };
+export const clearAsyncData = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {}
+};
 
-// export const removeEncryptedData = async (key: string) => {
-//   try {
-//     await EncryptedStorage.removeItem(key);
-//   } catch (e) {
-//     // remove error
-//   }
-// };
+// ASYNC KEY
+export const ASYNC_KEY = {
+  USER: 'user',
+  LANGUAGE: 'language',
+};

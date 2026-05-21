@@ -1,0 +1,30 @@
+{
+  "loginScreen": {
+    "loginScreen": "Pantalla de Inicio de Sesión",
+    "login": "Iniciar sesión",
+    "showErrorMessage": "Mostrar mensaje de error"
+  },
+  "modalScreen": {
+    "modalScreen": "Pantalla Modal",
+    "modalDescription": "Esta es una pantalla modal. Toque afuera para cerrarla."
+  },
+  "homeScreen": {
+    "homeScreen": "Pantalla de Inicio",
+    "openModalScreen": "Abrir pantalla modal",
+    "showSuccessMessage": "Mostrar mensaje de éxito"
+  },
+  "profileScreen": {
+    "profileScreen": "Pantalla de Perfil",
+    "logout": "Cerrar sesión",
+    "changeLanguage": "Cambiar idioma",
+    "cancel": "Cancelar"
+  },
+  "validations": {
+    "testError": "Este es un mensaje de error",
+    "testSuccess": "Este es un mensaje de éxito"
+  },
+  "languages": {
+    "en": "Inglés",
+    "es": "Español"
+  }
+}

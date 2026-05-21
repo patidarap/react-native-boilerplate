@@ -1,17 +1,44 @@
-import {NavigatorScreenParams} from '@react-navigation/native';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-export type StackScreenRouteProp = {
+export type AuthStackParamList = {
   LogIn: undefined;
-  // here take a reference from
+};
+
+export type AppStackParamList = {
   // https://reactnavigation.org/docs/typescript#nesting-navigators
   TabNavigation?: NavigatorScreenParams<TabScreenRouteProp>;
-
   ModalScreen: undefined;
 };
 
 export type TabScreenRouteProp = {
   Home: undefined;
+  Profile: undefined;
 };
+
+// Auth stack screen props — for screens inside AuthStack (e.g. LogIn)
+export type AuthStackScreenProps<T extends keyof AuthStackParamList> =
+  NativeStackScreenProps<AuthStackParamList, T>;
+
+// App stack screen props — for screens inside AppStack (e.g. ModalScreen)
+export type AppStackScreenProps<T extends keyof AppStackParamList> =
+  NativeStackScreenProps<AppStackParamList, T>;
+
+// Tab screen props — for screens inside TabNavigator
+export type TabNavigationScreenProps<T extends keyof TabScreenRouteProp> =
+  BottomTabScreenProps<TabScreenRouteProp, T>;
+
+// Composite props — for tab screens that also need to navigate to AppStack screens
+export type TabNavigationWithAppStackScreenProps<
+  T extends keyof TabScreenRouteProp,
+> = CompositeScreenProps<
+  BottomTabScreenProps<TabScreenRouteProp, T>,
+  NativeStackScreenProps<AppStackParamList, keyof AppStackParamList>
+>;
 
 export type UserTypes = {
   _id: string;

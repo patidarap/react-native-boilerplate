@@ -1,22 +1,25 @@
-import {colors, desiredFonts, fontFamily} from '@theme';
 import React, {FC} from 'react';
 import {StyleSheet, Text, TextProps} from 'react-native';
+import {colors, perfectSize} from '@theme';
+import {fonts} from '@assets';
 
 interface PrimaryTextProps extends TextProps {}
 
-const PrimaryText: FC<PrimaryTextProps> = ({children, ...props}) => {
+const PrimaryText: FC<PrimaryTextProps> = ({style, children, ...props}) => {
   return (
-    <Text style={[styles.textStyle, props.style]} {...props}>
+    <Text style={[styles.text, style]} {...props}>
       {children}
     </Text>
   );
 };
 
+export default PrimaryText;
+
 const styles = StyleSheet.create({
-  textStyle: {
+  text: {
     includeFontPadding: false,
-    ...desiredFonts(fontFamily.primary, 18, colors.black),
+    color: colors.black,
+    fontFamily: fonts.primary,
+    fontSize: perfectSize(16),
   },
 });
-
-export default PrimaryText;

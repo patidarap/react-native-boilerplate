@@ -1,74 +1,35 @@
-import { StackScreenRouteProp } from "@apptypes";
-import { ASYNC_USER, getAsyncData } from "@common";
-import { NavigationContainer } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/stack";
-import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
-import { navigationRef } from "./RootNavigation";
-import { LogIn, ModalScreen } from "@screens";
-import TabNavigation from "./TabNavigator";
-import { CustomLoader } from "@components";
-import { RootState, dispatch, setUserData } from "@appredux";
+import React, {FC, useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {dispatch, setLanguage, setUserData, useAppSelector} from '@appRedux';
+import {ASYNC_KEY, getAsyncData} from '@common';
+import {NoInternetModalPopUp, PrimaryLoader} from '@components';
+import {AuthStack, AppStack, navigationRef} from '@navigation';
 
-const Stack = createStackNavigator<StackScreenRouteProp>();
-
-const MainNavigation: FC = () => {
-  const { isLogIn } = useSelector((state: RootState) => state.profile);
-  const [isLoading, setIsLoading] = useState(true);
+export const MainNavigation: FC = () => {
+  const {isLogIn} = useAppSelector(state => state.profile);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getUser();
   }, []);
 
   const getUser = async () => {
-    const user = await getAsyncData(ASYNC_USER);
+    const user = await getAsyncData(ASYNC_KEY.USER);
+    const language = await getAsyncData(ASYNC_KEY.LANGUAGE);
     if (user) {
       dispatch(setUserData(user));
-      setIsLoading(false);
+    }
+    if (language) {
+      dispatch(setLanguage(language));
     }
     setIsLoading(false);
   };
 
   return (
     <NavigationContainer ref={navigationRef}>
-      {!isLoading && (
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            headerShadowVisible: false,
-          }}
-        >
-          {!isLogIn ? (
-            <Stack.Group>
-              <Stack.Screen name="LogIn" component={LogIn} />
-            </Stack.Group>
-          ) : (
-            <Stack.Group>
-              <Stack.Screen name="TabNavigation" component={TabNavigation} />
-
-              <Stack.Group
-                screenOptions={{
-                  headerShown: false,
-                  presentation: "transparentModal",
-                  gestureEnabled: true,
-                  ...TransitionPresets.ModalSlideFromBottomIOS,
-                }}
-              >
-                <Stack.Screen name="ModalScreen" component={ModalScreen} />
-              </Stack.Group>
-            </Stack.Group>
-          )}
-        </Stack.Navigator>
-      )}
-      <CustomLoader isLocalLoading={isLoading} />
+      {!isLoading && (isLogIn ? <AppStack /> : <AuthStack />)}
+      <PrimaryLoader isLocalLoading={isLoading} />
+      <NoInternetModalPopUp />
     </NavigationContainer>
   );
 };
-
-export default MainNavigation;
-
-const styles = StyleSheet.create({});

@@ -1,4 +1,11 @@
-import IC_Close from './IC_Close.svg';
-import IC_CloseWhite from './IC_CloseWhite.svg';
-const images = {};
-export {images, IC_Close, IC_CloseWhite};
+import IC_Home_Active from './IC_Home_Active.svg';
+import IC_Home_UnActive from './IC_Home_UnActive.svg';
+import IC_Setting_Active from './IC_Setting_Active.svg';
+import IC_Setting_UnActive from './IC_Setting_UnActive.svg';
+
+export {
+  IC_Home_Active,
+  IC_Home_UnActive,
+  IC_Setting_Active,
+  IC_Setting_UnActive,
+};
